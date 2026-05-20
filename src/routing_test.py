@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv("OPENROUTE_API_KEY")
 
-start = [4.4212, 51.21711]
+start = [4.4012, 51.21911]
 end = [4.401597, 51.219047]
 
 url = "https://api.openrouteservice.org/v2/directions/foot-walking"
@@ -22,4 +22,18 @@ body = {
 response = requests.post(url, json=body, headers=headers)
 
 data = response.json()
-print(type(response))
+
+route = data["routes"][0]
+
+duration_seconds = route["summary"]["duration"]
+distance_meters = route["summary"]["distance"]
+
+print(f"Duration: {round(duration_seconds / 60)} min")
+
+match distance_meters:
+    case d if d >= 10000:
+        print(f"Distance: {round(distance_meters / 1000)} km")
+    case d if 1000 <= d < 10000:
+        print(f"Distance: {round(distance_meters / 1000, 1)} km")
+    case d if d < 1000:
+        print(f"Distance: {round(distance_meters / 1000, 2)*1000} m")
