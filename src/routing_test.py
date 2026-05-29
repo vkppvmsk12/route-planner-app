@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from pprint import pprint
 
 load_dotenv()
 API_KEY = os.getenv("OPENROUTE_API_KEY")
@@ -28,8 +29,6 @@ route = data["routes"][0]
 duration_seconds = route["summary"]["duration"]
 distance_meters = route["summary"]["distance"]
 
-
-
 match duration_seconds:
     case d if d >= 86400:
         print(f"Duration: {int(duration_seconds/86400)} d {round((duration_seconds/86400-int(duration_seconds/86400))*24)} h")
@@ -40,8 +39,11 @@ match duration_seconds:
 
 match distance_meters:
     case d if d >= 10000:
-        print(f"Distance: {round(distance_meters / 1000)} km")
+        print(f"Total distance: {round(distance_meters / 1000)} km")
     case d if 1000 <= d < 10000:
-        print(f"Distance: {round(distance_meters / 1000, 1)} km")
+        print(f"Total distance: {round(distance_meters / 1000, 1)} km")
     case d if d < 1000:
-        print(f"Distance: {round(int(distance_meters/10)*10)} m")
+        print(f"Total distance: {round(int(distance_meters/10)*10)} m")
+
+print("\n")
+pprint(route["segments"][0]["steps"], indent=4)
