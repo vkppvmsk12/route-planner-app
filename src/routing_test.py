@@ -46,4 +46,13 @@ match distance_meters:
         print(f"Total distance: {round(int(distance_meters/10)*10)} m")
 
 print("\n")
-pprint(route["segments"][0]["steps"], indent=4)
+route_steps = route["segments"][0]["steps"]
+
+for index, step in enumerate(route_steps, start=1):
+    instruction = step['instruction']
+    distance = step['distance']
+    if distance == 0.0:
+        print(f"{index}. {instruction}.")
+    else:
+        print(f"{index}. {instruction} and continue for {distance}m ")
+    
